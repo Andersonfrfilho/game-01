@@ -6,8 +6,14 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFrame;
+
+import com.miyazaki.entities.Entity;
+import com.miyazaki.entities.Player;
+import com.miyazaki.graficos.Spritesheet;
 
 public class Game extends Canvas implements Runnable{
 	
@@ -22,12 +28,20 @@ public class Game extends Canvas implements Runnable{
 
 	private BufferedImage image;
 	
+	public List<Entity> entities;
+	public Spritesheet spritesheet;
+	
 	private int x = 0;
 	
 	public Game() {
 		this.setPreferredSize(new Dimension(WIDTH*SCALE,HEIGHT*SCALE));
 		initFrame();
 		image = new BufferedImage(WIDTH,HEIGHT,BufferedImage.TYPE_INT_RGB);
+		entities = new ArrayList<Entity>();
+		spritesheet = new Spritesheet("/spritesheet.png");
+		
+		Player player = new Player(32,0,16,16,spritesheet.getSprite(32,0,16,16));
+		entities.add(player);
 	}
 	
 	public void initFrame() {
@@ -61,7 +75,10 @@ public class Game extends Canvas implements Runnable{
 	}
 	
 	public void tick() {
-
+		for(int i=0; i< entities.size();i++) {
+			Entity e = entities.get(i);
+			e.tick();
+		}
 	}
 	public void render() {
 		BufferStrategy bs = this.getBufferStrategy();
@@ -74,7 +91,10 @@ public class Game extends Canvas implements Runnable{
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 		//renderização do jogo
 		//Graphics2D g2 = (Graphics2D) g;
-		
+		for(int i=0; i< entities.size();i++) {
+			Entity e = entities.get(i);
+			e.render(g);
+		}
 		//final
 		g.dispose();
 		g = bs.getDrawGraphics();
