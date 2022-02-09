@@ -34,19 +34,19 @@ public class Player extends Entity {
 
     public void tick() {
         moved = false;
-        if (right) {
+        if (right && World.isFree((int) (x + speed), this.getY())) {
             moved = true;
             dir = right_dir;
             this.setX(x += speed);
-        } else if (left) {
+        } else if (left && World.isFree((int) (x - speed), this.getY())) {
             moved = true;
             dir = left_dir;
             this.setX(x -= speed);
         }
-        if (up) {
+        if (up && World.isFree(this.getX(), (int) (y - speed))) {
             moved = true;
             this.setY(y -= speed);
-        } else if (down) {
+        } else if (down && World.isFree(this.getX(), (int) (y + speed))) {
             moved = true;
             this.setY(y += speed);
         }
